@@ -13,7 +13,7 @@ class BookFactory extends Factory
 
     public function definition(): array
     {
-        $title = $this->faker->sentence(3);
+        $title = $this->faker->unique()->sentence(3);
         
         return [
             'title' => $title,
