@@ -13,8 +13,11 @@ class BookResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'chef' => $this->chef,
+            'description' => $this->description,
             'slug' => $this->slug,
-            'category' => $this->category->name,
+            'category' => new CategoryResource($this->whenLoaded('category')),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }
