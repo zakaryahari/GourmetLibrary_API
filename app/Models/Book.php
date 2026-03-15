@@ -13,7 +13,7 @@ class Book extends Model
     use HasFactory;
 
     protected $table = 'books';
-    protected $fillable = ['title', 'chef', 'description', 'slug', 'category_id'];
+    protected $fillable = ['title', 'chef', 'description', 'slug', 'category_id', 'borrow_count'];
 
     public function category(): BelongsTo
     {

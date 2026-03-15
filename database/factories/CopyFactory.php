@@ -2,22 +2,20 @@
 
 namespace Database\Factories;
 
+use App\Models\Copy;
+use App\Models\Book;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Copy>
- */
 class CopyFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Copy::class;
+
     public function definition(): array
     {
         return [
-            //
+            'book_id' => Book::factory(),
+            'status' => $this->faker->randomElement(['available', 'borrowed']),
+            'is_damaged' => $this->faker->boolean(20),
         ];
     }
 }

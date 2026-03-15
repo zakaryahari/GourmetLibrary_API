@@ -13,15 +13,46 @@ class BookController extends Controller
     {
         $query = Book::with('category');
         
+        // Filter by category slug
+        if (request('category')) {
+            $query->whereHas('category', function($q) {
+                $q->where('slug', request('category'));
+            });
+        }
+        
+        // Filter by chef
         if (request('chef')) {
             $query->where('chef', request('chef'));
         }
         
-        if (request('page')) {
-            return BookResource::collection($query->paginate(10));
+        // Search by title or chef
+        if (request('search')) {
+            $search = request('search');
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                  ->orWhere('chef', 'like', '%' . $search . '%');
+            });
         }
         
-        return BookResource::collection($query->get());
+        // Sorting
+        if (request('sort')) {
+            switch (request('sort')) {
+                case 'newest':
+                    $query->orderBy('created_at', 'desc');
+                    break;
+                case 'popular':
+                    $query->orderBy('borrow_count', 'desc');
+                    break;
+                default:
+                    $query->orderBy('created_at', 'desc');
+            }
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+        
+        // Pagination
+        $perPage = request('per_page', 10);
+        return BookResource::collection($query->paginate($perPage));
     }
 
     public function show($slug)
